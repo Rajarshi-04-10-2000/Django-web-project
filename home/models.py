@@ -10,9 +10,10 @@ class Contact(models.Model):
     name = models.CharField(max_length=122)
     email = models.CharField(max_length=122)
     phone = models.CharField(max_length=12)
-    desc = models.TextField()
+    password = models.CharField(
+        max_length=8, default='0000000', editable=False)
     date = models.DateField()
 #goto admin and import this Contact oblject and register the model
 
     def __str__(self):
-        return self.name #isse name display hoga object mein in data base
+        return self.name  # isse name display hoga object mein in data base

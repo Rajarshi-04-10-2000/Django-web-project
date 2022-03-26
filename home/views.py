@@ -1,10 +1,12 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 #import Contacts from models
 from home.models import Contact
 #import datetime
 from datetime import datetime
 #added msg dependecy from google(django msg framework) to show profile updated
 from django.contrib import messages
+#authorization
+from django.contrib.auth.models import User
 
 
 #s1 import HttpResponse
@@ -40,11 +42,33 @@ def contacts(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        desc = request.POST.get('desc')
-        contact = Contact(name=name, email=email, phone=phone,
-                          desc=desc, date=datetime.today())
-        contact.save()
-        messages.success(request, 'profile updated')
+        password = request.POST.get('pass')
+        if len(name) < 2 or len(email) < 3 or len(phone) < 10:
+            messages.error(request, "Please fill the form correctly")
+        else:
+            contact = Contact(name=name, email=email,
+                              phone=phone, password=password, date=datetime.today())
+            contact.save()
+            messages.success(request, 'Profile updated')
 
     return render(request, 'contacts.html')
     #return HttpResponse("this is contacts page")
+
+    #output
+
+
+def output(request):
+    name = Contact.objects.all()
+    phone = Contact.objects.all()[0].phone
+
+    #if(phone == "9789091524"):
+    #phone = "lorem ipsum "
+    phone = int(phone)
+    phone = phone*0;
+    #name = name.values_list()
+    #k = name[0]
+    context = {
+             'Name': name,
+             'Phone': phone
+             }
+    return render(request, 'output.html', context)
